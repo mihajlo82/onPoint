@@ -16,55 +16,81 @@ You may also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### caching
+There is no need for caching for this app but in case there is I would use react memo, useMemo or useCallback
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Answers 
 
-### `npm run eject`
+1. If you had control of the web-server, what are some ways you might implement a caching solution?
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+On backend side, I would implement reverse caching, where copies of the Web objects on your own internal Web servers are stored on a proxy server at the edge of your network to increase performance for outsiders who visit your sites.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Also, implementing Redis is a good solution for caching. Redis is an in-memory data structure store, used as a distributed, in-memory key–value database, cache and message broker, with optional durability. Redis supports different kinds of abstract data structures, such as strings, lists, maps, sets, sorted sets, HyperLogLogs, bitmaps, streams, and spatial indices.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+2. How might you implement offline caching for your typeahead component?
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+-Local storage can help about data caching but more efficient way is to use a service workers and make some type of progressive web app
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. When using traditional session cookies, what are the primary security concerns and mitigation techniques you might use?
 
-### Code Splitting
+Here are five security issues with cookies that you should know about:
+Cross-Site Request Forgery Attack (XSRF) 
+Session Fixation. ...
+Cross-Site Scripting (XSS) ...
+Cookie Tossing Attack. ...
+Cookie Capturing.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+-Since the data in cookies doesn't change, cookies themselves aren't harmful. They can't infect computers with viruses or other malware. However, some cyberattacks can hijack cookies and enable access to your browsing sessions. The danger lies in their ability to track individuals' browsing histories.
 
-### Analyzing the Bundle Size
+Since tracking cookies are used to gather information about you without your authorization, they present a real threat to your online privacy. Tracking cookies like third-party cookies aren't used to enhance your experience but rather to keep track of your activity across certain websites.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+4. What are some advantages and disadvantages to using JWT for authorization and authentication in a web application?
+ADVANTAGES:
+-you can create and verify the tokens on the fly without a need to store them ever in the database.
+-Simple implementation and faster development time.
+-Can be used across services and specifically be isolated in an authorization micro-service that can create these tokens. The rest of your microservices can just have the public key to verify the signature of the tokens.
+-The tokens are based on JSON, which is defacto standard now-a-days for inter-message communication among web application & services.
 
-### Making a Progressive Web App
+DISADVANTAGES:
+-No way to log out or invalidate sessions for users. Moreover, there is no way for a user to disable their sessions across multiple devices.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+-Since the tokens are generated and verified on the fly, we can't have access to the different logged-in clients which can pose problems when you need to identify the devices.
 
-### Advanced Configuration
+-Data leakage is plausible through a single secret key used for signing the tokens. It is much harder to lose the entire database, for example, in cases of session management when compared to JWTs. Since JWTs are created on the fly, the only thing that is protecting the creation of forged tokens is the secret key used to sign the tokens.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+-JWTs need care & understanding for implementation. If you use the none algorithm, it uses no signing key, which means creating a forged token is child's play. Once you have the forged token and you're using ids for users that are easier to guess (think of integer ids), or you're using frameworks such as Strapi that has user id 1 as the administrator, with a forged token, your entire account will be taken over in a matter of seconds.
 
-### Deployment
+-We should always take care of not blindly loading signing keys with the kid header in JWT. The key should always be first validated for correctness as compared with the algorithm specified in the header.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+5. What are all the ways you can think of to write BAD React code?
 
-### `npm run build` fails to minify
+use controlled component instead of uncontrolled, avoiding expensive re-render components and potentially loop which can make a performance issues by incorrect usage of react hooks. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+optimization can make great impact on application performance but also can make negative impact because of incorrect usage, so should be very careful.
+
+Avoid prop drilling through a child components and use some of the state management tools instead.
+
+Clear unused props because of unnecessary rendering components which can make performance issue also.
+
+Structure code into reusable components and avoid duplicate code. 
+
+Isolate your functions in a separate files because of a better readability 
+
+In components do not mutate props objects because props are immutable and should not be mutated. Rather, make a copy and do some changes if needed
+
+Always use a key prop in a list
+
+Avoid component declaration within another component
+
+use lazy loading if application running slow
+
+clean unused imports and console logs
+
+6. What new Web or React APIs are you most excited about?
+
+Axios - because of easy implementation and I consider it as a very useful tool for developers. In an easy way can communicate to backend.

@@ -1,0 +1,22 @@
+.innerSection{
+    text-align:center;
+    width:50vw;
+}
+
+.countryWrapp{
+    width:100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.country{
+    padding: 10px;
+    background-color: darkgray;
+    color:white;
+    border-radius: 9px;
+    margin-left: 15px;
+    margin-top: 15px;
+    font-style: italic;
+    font-weight: bold;
+}
